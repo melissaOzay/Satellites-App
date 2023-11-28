@@ -1,9 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.SatellitesApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    </style>
+    <style name="Theme.SatellitesApp" parent="Base.Theme.SatellitesApp" />
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+        <item name="backgroundColor">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
     </style>
 
-    <style name="Theme.SatellitesApp" parent="Base.Theme.SatellitesApp" />
+
 </resources>
