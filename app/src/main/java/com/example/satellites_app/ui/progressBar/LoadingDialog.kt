@@ -1,4 +1,4 @@
-package com.example.satellites_app.ui.splash.progressBar
+package com.example.satellites_app.ui.progressBar
 
 import android.app.Dialog
 import android.content.Context

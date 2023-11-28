@@ -54,7 +54,15 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.45")
     kapt("com.google.dagger:hilt-android-compiler:2.45")
 
-    //activity
+    //activity-fragment
     implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation "androidx.fragment:fragment-ktx:1.4.0"
 
+    //navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
+
+    //Room
+    implementation "androidx.room:room-runtime:2.2.5"
+    kapt "androidx.room:room-compiler:2.2.5"
 }

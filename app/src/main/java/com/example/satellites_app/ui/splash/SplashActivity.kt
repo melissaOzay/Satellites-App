@@ -1,4 +1,4 @@
-package com.example.satellites_app.ui.splash.splash
+package com.example.satellites_app.ui.splash
 
 import android.annotation.SuppressLint
 import android.content.Intent

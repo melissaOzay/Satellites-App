@@ -3,7 +3,7 @@ package com.example.satellites_app.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import com.example.satellites_app.ui.splash.progressBar.LoadingDialog
+import com.example.satellites_app.ui.progressBar.LoadingDialog
 
 abstract class BaseActivity<VM : BaseViewModel, B : ViewBinding> : AppCompatActivity() {
     abstract val viewModel: VM
