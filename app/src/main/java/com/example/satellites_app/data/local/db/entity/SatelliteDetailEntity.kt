@@ -3,11 +3,13 @@ package com.example.satellites_app.data.local.db.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "satellite_list")
-data class SatelliteListEntity(
+@Entity(tableName = "satellite_detail")
+data class SatelliteDetailEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val satelliteId: Int,
-    val active: Boolean,
-    val name: String
+    val costPerLaunch: Int,
+    val firstFlight: String,
+    val height: Int,
+    val mass: Int
 )

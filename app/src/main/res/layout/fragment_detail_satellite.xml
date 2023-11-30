@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_24ssp"
+        android:textStyle="bold"
+        tools:text="Starship-1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvFirstFlight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/_10ssp"
+        tools:text="2021-12-01" />
+
+    <LinearLayout
+        android:id="@+id/linearHeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/height_mass"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            tools:text="Height/Mass:" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_12ssp"
+            tools:text="118/1167000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cost"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            tools:text="Cost:" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_12ssp"
+            tools:text="7200000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/last_position"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            tools:text="Last Position:" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_12ssp"
+            tools:text="0.213733842,0.213733842" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.example.satellites_app.data
+package com.example.satellites_app.data.di
 
 import android.content.Context
 import androidx.room.Room
@@ -18,8 +18,7 @@ object SatelliteDBModule {
     @Singleton
     @Provides
     fun provideSatelliteDataBase(@ApplicationContext app: Context) =
-        Room.databaseBuilder(app, SatelliteAppDB::class.java, "satellite_db")
-            .fallbackToDestructiveMigration().allowMainThreadQueries().build()
+        Room.databaseBuilder(app, SatelliteAppDB::class.java, "satellite_db").build()
 
     @Reusable
     @Provides
