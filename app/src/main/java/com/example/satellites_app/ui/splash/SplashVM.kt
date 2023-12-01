@@ -9,12 +9,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashVM @Inject constructor():BaseViewModel() {
-    val openMainScreen = MutableLiveData<Boolean>()
+class SplashVM @Inject constructor() : BaseViewModel() {
+    val canOpenMainScreen = MutableLiveData<Boolean>()
+
     init {
         viewModelScope.launch {
             delay(2000)
-            openMainScreen.value=true
+            canOpenMainScreen.value = true
         }
     }
 }

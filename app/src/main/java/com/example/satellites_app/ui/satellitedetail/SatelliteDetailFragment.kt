@@ -1,15 +1,14 @@
-package com.example.satellites_app.ui.detail
+package com.example.satellites_app.ui.satellitedetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.example.satellites_app.base.BaseFragment
 import com.example.satellites_app.databinding.FragmentDetailSatelliteBinding
 import com.example.satellites_app.utility.DateFormat
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SatelliteDetailFragment : BaseFragment<FragmentDetailSatelliteBinding, SatelliteDetailVM>() {
@@ -23,16 +22,19 @@ class SatelliteDetailFragment : BaseFragment<FragmentDetailSatelliteBinding, Sat
         return FragmentDetailSatelliteBinding.inflate(layoutInflater)
     }
 
-    override fun onResume() {
-        super.onResume()
-        arguments?.let {
-            val id = SatelliteDetailFragmentArgs.fromBundle(it).id
-            viewModel.getSatelliteDetail(id)
-            viewModel.getSatellitePositions(id.toString())
-        }
+    private val args: SatelliteDetailFragmentArgs by navArgs()
+
+    private val name by lazy {
+        args.name
+    }
+
+    override fun initUI() {
+        super.initUI()
+        val id = args.id
+        viewModel.getSatelliteDetail(id)
+        viewModel.getSatellitePositions(id.toString())
         observeSatelliteDetail()
         observeErrorMessage()
-
     }
 
     private fun observeErrorMessage() {
@@ -43,27 +45,22 @@ class SatelliteDetailFragment : BaseFragment<FragmentDetailSatelliteBinding, Sat
 
     private fun observeSatelliteDetail() {
         viewModel.satelliteDetail.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                it?.map {
-                    arguments?.let { arg ->
-                        val name = SatelliteDetailFragmentArgs.fromBundle(arg).name
-                        with(binding) {
-                            tvName.text = name
-                            val date = it.firstFlight
-                            val newDateFormat = DateFormat.format(date)
-                            val heightMass = "${it.height}/${it.mass}"
-                            tvFirstFlight.text = newDateFormat
-                            tvHeight.text = heightMass
-                            tvCost.text = it.costPerLaunch.toString()
-                        }
-
-                    }
-                }
+            val name = name
+            with(binding) {
+                tvName.text = name
+                val date = it.firstFlight
+                val newDateFormat = DateFormat.format(date)
+                val heightMass = "${it.height}/${it.mass}"
+                tvFirstFlight.text = newDateFormat
+                tvHeight.text = heightMass
+                tvCost.text = it.costPerLaunch.toString()
             }
+
         }
+
         viewModel.satellitePosition.observe(viewLifecycleOwner) {
-                val positionNumber = "(${it.posX},${it.posY})"
-                binding.tvPosition.text = positionNumber
+            val positionNumber = "(${it.posX},${it.posY})"
+            binding.tvPosition.text = positionNumber
         }
     }
 

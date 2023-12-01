@@ -3,14 +3,14 @@ package com.example.satellites_app.features.satallite.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Position(
+data class JsonPosition(
     val posX: Double,
     val posY: Double
 )
 @Serializable
-data class SatellitePositionModel(
+data class JsonSatellitePositionsModel(
     val id: String,
-    val positions: List<Position>
+    val positions: List<JsonPosition>
 )
 @Serializable
-data class SatellitePositionList(val list: List<SatellitePositionModel>)
+data class JsonSatellitePositionList(val list: List<JsonSatellitePositionsModel>)

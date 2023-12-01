@@ -1,11 +1,10 @@
-package com.example.satellites_app.ui.detail
+package com.example.satellites_app.ui.satellitedetail
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.satellites_app.base.BaseViewModel
-import com.example.satellites_app.features.satallite.data.model.Position
-import com.example.satellites_app.features.satallite.data.model.SatelliteDetailModel
+import com.example.satellites_app.features.satallite.domain.model.Position
+import com.example.satellites_app.features.satallite.domain.model.SatelliteDetailModel
 import com.example.satellites_app.features.satallite.domain.usecase.SatelliteDetailsUseCase
 import com.example.satellites_app.features.satallite.domain.usecase.SatellitePositionsUseCase
 import com.example.satellites_app.utility.Resource
@@ -19,7 +18,7 @@ class SatelliteDetailVM @Inject constructor(
     private val satelliteDetailUseCase: SatelliteDetailsUseCase,
     private val satellitePositionUseCase: SatellitePositionsUseCase
 ) : BaseViewModel() {
-    private val _satelliteDetail = MutableLiveData<List<SatelliteDetailModel>?>()
+    private val _satelliteDetail = MutableLiveData<SatelliteDetailModel>()
     val satelliteDetail = _satelliteDetail
 
     private val _satellitePosition = MutableLiveData<Position>()
@@ -33,7 +32,6 @@ class SatelliteDetailVM @Inject constructor(
         viewModelScope.launch {
             when (val response = satellitePositionUseCase(id.orEmpty())) {
                 is Resource.Success -> {
-                    delay(2000)
                     hideLoading()
                     response.data.firstOrNull()?.positions?.let { positions ->
                         for (position in positions) {
@@ -43,8 +41,8 @@ class SatelliteDetailVM @Inject constructor(
                     }
                 }
 
-
                 is Resource.Failure -> {
+                    hideLoading()
                     _errorMessage.postValue(response.error)
                 }
 
@@ -57,12 +55,14 @@ class SatelliteDetailVM @Inject constructor(
         viewModelScope.launch {
             when (val response = satelliteDetailUseCase(id)) {
                 is Resource.Success -> {
-                    delay(2000)
                     hideLoading()
-                    _satelliteDetail.postValue(response.data)
+                    response.data.let {
+                        _satelliteDetail.postValue(it)
+                    }
                 }
 
                 is Resource.Failure -> {
+                    hideLoading()
                     _errorMessage.postValue(response.error)
                 }
             }

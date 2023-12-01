@@ -1,14 +1,15 @@
 package com.example.satellites_app.features.satallite.data.local
 
 import com.example.satellites_app.data.local.db.dao.SatelliteDao
+import com.example.satellites_app.data.local.db.entity.Position
 import com.example.satellites_app.data.local.db.entity.SatelliteDetailEntity
 import com.example.satellites_app.data.local.db.entity.SatelliteListEntity
 import com.example.satellites_app.data.local.db.entity.SatellitePositionEntity
-import com.example.satellites_app.features.satallite.data.model.SatelliteDetailModel
-import com.example.satellites_app.features.satallite.data.model.SatelliteListModel
-import com.example.satellites_app.features.satallite.data.model.SatellitePositionModel
-import com.example.satellites_app.features.satallite.domain.mapper.toSatelliteDetails
+import com.example.satellites_app.features.satallite.domain.mapper.toSatelliteDetail
 import com.example.satellites_app.features.satallite.domain.mapper.toSatellitePositions
+import com.example.satellites_app.features.satallite.domain.model.SatelliteDetailModel
+import com.example.satellites_app.features.satallite.domain.model.SatellitePositionsModel
+import com.example.satellites_app.features.satallite.domain.model.SatellitesModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,29 +17,49 @@ import javax.inject.Singleton
 class SatelliteLocalDSImpl @Inject constructor(
     private val satelliteDao: SatelliteDao
 ) : SatelliteLocalDS {
-    override suspend fun insertSatelliteList(satellites: SatelliteListEntity) {
-        return satelliteDao.insertList(satellites)
+    override suspend fun insertSatelliteList(satellites: SatellitesModel) {
+        return satelliteDao.insertList(
+            SatelliteListEntity(
+                satelliteId = satellites.id,
+                active = satellites.active,
+                name = satellites.name
+            )
+        )
     }
 
-    override suspend fun getSatellites(): List<SatelliteListModel> {
-        return satelliteDao.getSatelliteList().map { it.toSatelliteDetails() }
+    override suspend fun getSatellites(): List<SatellitesModel> {
+        return satelliteDao.getSatelliteList().map { it.toSatelliteDetail() }
     }
 
-    override suspend fun getSatelliteDetails(id: Int): List<SatelliteDetailModel> {
-        return satelliteDao.getSatelliteDetail(id).map { it.toSatelliteDetails() }
+    override suspend fun getSatelliteDetail(id: Int): SatelliteDetailModel? {
+        return satelliteDao.getSatelliteDetail(id)?.toSatelliteDetail()
     }
 
-    override suspend fun insertSatelliteDetails(satelliteDetailEntity: SatelliteDetailEntity) {
-        return satelliteDao.insertDetail(satelliteDetailEntity)
+    override suspend fun insertSatelliteDetail(satelliteDetail: SatelliteDetailModel) {
+        return satelliteDao.insertDetail(
+            SatelliteDetailEntity(
+                satelliteId = satelliteDetail.id,
+                costPerLaunch = satelliteDetail.costPerLaunch,
+                firstFlight = satelliteDetail.firstFlight,
+                height = satelliteDetail.height,
+                mass = satelliteDetail.mass
+            )
+        )
     }
 
-    override suspend fun getSatellitePositions(id: String): List<SatellitePositionModel> {
+    override suspend fun getSatellitePositions(id: String): List<SatellitePositionsModel> {
         return satelliteDao.getSatellitePosition(id).map { it.toSatellitePositions() }
 
     }
 
-    override suspend fun insertSatellitePositions(satellitePositionEntity: SatellitePositionEntity) {
-        return satelliteDao.insertPosition(satellitePositionEntity)
+    override suspend fun insertSatellitePositions(satellitePositionsModel: SatellitePositionsModel) {
+        return satelliteDao.insertPosition(SatellitePositionEntity(
+            positionId = satellitePositionsModel.id,
+            positions = satellitePositionsModel.positions.map {
+                Position(posX = it.posX, posY = it.posY)
+            }
+        )
+        )
     }
 
 }

@@ -19,11 +19,11 @@ class SplashActivity : BaseActivity<SplashVM, ActivitySplashBinding>() {
 
     override fun initialize() {
         super.initialize()
-        observerOpenMainView()
+        observeOpenMainView()
     }
 
-    private fun observerOpenMainView() {
-        viewModel.openMainScreen.observe(this) {
+    private fun observeOpenMainView() {
+        viewModel.canOpenMainScreen.observe(this) {
             if (it) {
                 startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             }

@@ -1,4 +1,4 @@
-package com.example.satellites_app.ui.listScreen
+package com.example.satellites_app.ui.satellites
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.satellites_app.base.BaseFragment
 import com.example.satellites_app.databinding.FragmentListSatelliteBinding
-import com.example.satellites_app.ui.listScreen.adapter.SatelliteListAdapter
+import com.example.satellites_app.ui.satellites.adapter.SatelliteListAdapter
 import com.example.satellites_app.utility.SatelliteListAdapterListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,7 +45,6 @@ class SatelliteListFragment : BaseFragment<FragmentListSatelliteBinding, Satelli
     }
     override fun onResume() {
         super.onResume()
-        performSearch()
         binding.searchView.setQuery(null, false)
     }
     override fun onDestroyView() {
@@ -70,12 +69,11 @@ class SatelliteListFragment : BaseFragment<FragmentListSatelliteBinding, Satelli
     private fun observeErrorMessage() {
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
-
         }
     }
 
     private fun observeSatelliteList() {
-        viewModel.satelliteList.observe(viewLifecycleOwner) { list ->
+        viewModel.satellites.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
             if (list.isEmpty()) {
                 binding.message.visibility = View.VISIBLE

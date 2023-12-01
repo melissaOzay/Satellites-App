@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SatelliteDetailModel(
+data class JsonSatelliteDetailModel(
     val id: Int,
     @SerializedName("cost_per_launch")
     val costPerLaunch: Int,

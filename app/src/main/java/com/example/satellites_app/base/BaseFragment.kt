@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.example.satellites_app.ui.progressBar.LoadingDialog
+import com.example.satellites_app.ui.progressbar.LoadingDialog
 
 abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
     private var loadingDialog: LoadingDialog? = null
@@ -26,6 +26,16 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = getViewBinding(inflater, container)
+        observeLoadingDialog()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUI()
+    }
+
+    private fun observeLoadingDialog() {
         viewModel.loadingState.observe(viewLifecycleOwner) {
             if (it.equals(true)) {
                 if (loadingDialog == null) {
@@ -35,9 +45,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
             } else {
                 loadingDialog?.hideLoading()
             }
-            initUI()
         }
-        return binding.root
     }
 
     override fun onDestroyView() {

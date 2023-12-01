@@ -6,6 +6,6 @@ import javax.inject.Inject
 class SatelliteDetailsUseCase @Inject constructor(
     private val satelliteRepository: SatelliteRepository
 ) {
-    suspend operator fun invoke(id: Int) = satelliteRepository.getSatelliteDetails(id)
+    suspend operator fun invoke(id: Int) = satelliteRepository.getSatelliteDetail(id)
 
 }

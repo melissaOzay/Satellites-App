@@ -1,15 +1,13 @@
 package com.example.satellites_app.features.satallite.data.repository
 
-import android.util.Log
-import com.example.satellites_app.data.local.db.entity.Position
-import com.example.satellites_app.data.local.db.entity.SatelliteDetailEntity
-import com.example.satellites_app.data.local.db.entity.SatelliteListEntity
-import com.example.satellites_app.data.local.db.entity.SatellitePositionEntity
 import com.example.satellites_app.features.satallite.data.local.SatelliteLocalDS
-import com.example.satellites_app.features.satallite.data.model.SatelliteDetailModel
-import com.example.satellites_app.features.satallite.data.model.SatelliteListModel
-import com.example.satellites_app.features.satallite.data.model.SatellitePositionList
-import com.example.satellites_app.features.satallite.data.model.SatellitePositionModel
+import com.example.satellites_app.features.satallite.data.model.JsonSatelliteDetailModel
+import com.example.satellites_app.features.satallite.data.model.JsonSatelliteListModel
+import com.example.satellites_app.features.satallite.data.model.JsonSatellitePositionList
+import com.example.satellites_app.features.satallite.domain.mapper.convertJsonToModel
+import com.example.satellites_app.features.satallite.domain.model.SatelliteDetailModel
+import com.example.satellites_app.features.satallite.domain.model.SatellitePositionsModel
+import com.example.satellites_app.features.satallite.domain.model.SatellitesModel
 import com.example.satellites_app.features.satallite.domain.repository.SatelliteRepository
 import com.example.satellites_app.utility.ReadFile
 import com.example.satellites_app.utility.Resource
@@ -23,20 +21,14 @@ class SatelliteRepositoryImpl @Inject constructor(
     private val satelliteLocalDs: SatelliteLocalDS
 ) : SatelliteRepository {
 
-    override suspend fun getSatelliteList(): Resource<List<SatelliteListModel>> {
+    override suspend fun getSatelliteList(): Resource<List<SatellitesModel>> {
         return withContext(Dispatchers.IO) {
             try {
                 val localSatellites = satelliteLocalDs.getSatellites()
                 if (localSatellites.isEmpty()) {
-                    val satelliteList = addSatelliteList()
+                    val satelliteList = getSatellites()
                     satelliteList.map {
-                        satelliteLocalDs.insertSatelliteList(
-                            SatelliteListEntity(
-                                satelliteId = it.id,
-                                active = it.active,
-                                name = it.name
-                            )
-                        )
+                        satelliteLocalDs.insertSatelliteList(it)
                     }
                     Resource.Success(satelliteList)
                 } else {
@@ -48,49 +40,39 @@ class SatelliteRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSatelliteDetails(id: Int): Resource<List<SatelliteDetailModel>> {
+    override suspend fun getSatelliteDetail(id: Int): Resource<SatelliteDetailModel> {
         return withContext(Dispatchers.IO) {
             try {
-                val localSatellites = satelliteLocalDs.getSatelliteDetails(id)
-                if (localSatellites.isEmpty()) {
-                    val satelliteDetail = addSatelliteDetails()
+                val localSatelliteDetail = satelliteLocalDs.getSatelliteDetail(id)
+                if (localSatelliteDetail == null) {
+                    val satelliteDetail = getSatelliteDetails()
                     satelliteDetail.map {
-                        satelliteLocalDs.insertSatelliteDetails(
-                            SatelliteDetailEntity(
-                                satelliteId = it.id,
-                                costPerLaunch = it.costPerLaunch,
-                                firstFlight = it.firstFlight,
-                                height = it.height,
-                                mass = it.mass,
-                            )
-                        )
+                        satelliteLocalDs.insertSatelliteDetail(it)
                     }
-                    Resource.Success(satelliteDetail)
+                    val satelliteDetailModel = satelliteLocalDs.getSatelliteDetail(id)
+                    try {
+                        Resource.Success(satelliteDetailModel!!)
+                    } catch (ex: Exception) {
+                        Resource.Failure(Throwable(ex.message).toString())
+                    }
                 } else {
-                    Resource.Success(localSatellites)
+                    Resource.Success(localSatelliteDetail)
                 }
             } catch (ex: Exception) {
                 Resource.Failure(Throwable(ex.message).toString())
             }
-        }
 
+        }
     }
 
-    override suspend fun getSatellitePositions(id: String): Resource<List<SatellitePositionModel>> {
+    override suspend fun getSatellitePositions(id: String): Resource<List<SatellitePositionsModel>> {
         return withContext(Dispatchers.IO) {
             try {
                 val localSatellites = satelliteLocalDs.getSatellitePositions(id)
                 if (localSatellites.isEmpty()) {
-                    val satellitePosition = addSatellitePositions()
+                    val satellitePosition = getSatellitePositions()
                     satellitePosition.map {
-                        satelliteLocalDs.insertSatellitePositions(
-                            SatellitePositionEntity(
-                                positionId = it.id,
-                                positions = it.positions.map {position->
-                                    Position(posX = position.posX, posY = position.posY)
-                                }
-                            )
-                        )
+                        satelliteLocalDs.insertSatellitePositions(it)
                     }
                     Resource.Success(satellitePosition)
                 } else {
@@ -102,31 +84,31 @@ class SatelliteRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun addSatelliteList(): List<SatelliteListModel> {
+    private suspend fun getSatellites(): List<SatellitesModel> {
         return withContext(Dispatchers.IO) {
             val read = ReadFile.readJsonFromAssets("satellite_list.json")
-            val type = object : TypeToken<List<SatelliteListModel>>() {}.type
-            val satelliteList = Gson().fromJson<List<SatelliteListModel>>(read, type)
-            satelliteList
+            val type = object : TypeToken<List<JsonSatelliteListModel>>() {}.type
+            val satelliteList = Gson().fromJson<List<JsonSatelliteListModel>>(read, type)
+            satelliteList.map { it.convertJsonToModel() }
         }
 
     }
 
-    private suspend fun addSatelliteDetails(): List<SatelliteDetailModel> {
+    private suspend fun getSatelliteDetails(): List<SatelliteDetailModel> {
         return withContext(Dispatchers.IO) {
             val read = ReadFile.readJsonFromAssets("satellite_detail.json")
-            val type = object : TypeToken<List<SatelliteDetailModel>>() {}.type
-            val satelliteDetails = Gson().fromJson<List<SatelliteDetailModel>>(read, type)
-            satelliteDetails
+            val type = object : TypeToken<List<JsonSatelliteDetailModel>>() {}.type
+            val satelliteDetails = Gson().fromJson<List<JsonSatelliteDetailModel>>(read, type)
+            satelliteDetails.map { it.convertJsonToModel() }
         }
 
     }
 
-    private suspend fun addSatellitePositions(): List<SatellitePositionModel> {
+    private suspend fun getSatellitePositions(): List<SatellitePositionsModel> {
         return withContext(Dispatchers.IO) {
             val read = ReadFile.readJsonFromAssets("satellite_position.json")
-            val satellitePositions = Gson().fromJson(read, SatellitePositionList::class.java)
-            satellitePositions.list
+            val satellitePositions = Gson().fromJson(read, JsonSatellitePositionList::class.java)
+            satellitePositions.list.map { it.convertJsonToModel() }
         }
 
     }

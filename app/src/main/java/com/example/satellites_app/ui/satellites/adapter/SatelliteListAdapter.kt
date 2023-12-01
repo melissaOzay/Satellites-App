@@ -1,4 +1,4 @@
-package com.example.satellites_app.ui.listScreen.adapter
+package com.example.satellites_app.ui.satellites.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.satellites_app.R
 import com.example.satellites_app.databinding.ItemSatelliteListBinding
-import com.example.satellites_app.features.satallite.data.model.SatelliteListModel
-import com.example.satellites_app.utility.ChangeTextColor
+import com.example.satellites_app.features.satallite.domain.model.SatellitesModel
 import com.example.satellites_app.utility.SatelliteListAdapterListener
+import com.example.satellites_app.utility.changeAlpha
 
 class SatelliteListAdapter(private val listener: SatelliteListAdapterListener) :
-    ListAdapter<SatelliteListModel, SatelliteListAdapter.SatelliteViewHolder>(SatelliteDiffUtil()) {
+    ListAdapter<SatellitesModel, SatelliteListAdapter.SatelliteViewHolder>(SatelliteDiffUtil()) {
+    companion object {
+        private const val ACTIVE_ALPHA = 200
+        private const val PASSIVE_ALPHA = 50
+    }
 
     class SatelliteViewHolder(binding: ItemSatelliteListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -22,7 +26,7 @@ class SatelliteListAdapter(private val listener: SatelliteListAdapterListener) :
         private val tvActive = binding.tvActive
         private val ivActive = binding.ivActive
         private val context: Context = itemView.context
-        fun bindItems(listener: SatelliteListAdapterListener, item: SatelliteListModel) {
+        fun bindItems(listener: SatelliteListAdapterListener, item: SatellitesModel) {
             tvName.text = item.name
             if (item.active) {
                 tvActive.setText(R.string.active)
@@ -32,7 +36,8 @@ class SatelliteListAdapter(private val listener: SatelliteListAdapterListener) :
                         R.color.green
                     )
                 )
-                ChangeTextColor.changeAlpha(200, tvName, tvActive)
+                tvActive.changeAlpha(ACTIVE_ALPHA)
+                tvName.changeAlpha(ACTIVE_ALPHA)
 
             } else {
                 tvActive.setText(R.string.passive)
@@ -42,15 +47,17 @@ class SatelliteListAdapter(private val listener: SatelliteListAdapterListener) :
                         R.color.red
                     )
                 )
-                ChangeTextColor.changeAlpha(50, tvName, tvActive)
+                tvActive.changeAlpha(PASSIVE_ALPHA)
+                tvName.changeAlpha(PASSIVE_ALPHA)
+
             }
             itemView.setOnClickListener {
                 listener.clickDetail(item.id, item.name)
             }
 
         }
-
     }
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -66,18 +73,18 @@ class SatelliteListAdapter(private val listener: SatelliteListAdapterListener) :
 
     }
 
-    private class SatelliteDiffUtil : DiffUtil.ItemCallback<SatelliteListModel>() {
+    private class SatelliteDiffUtil : DiffUtil.ItemCallback<SatellitesModel>() {
 
         override fun areContentsTheSame(
-            oldItem: SatelliteListModel,
-            newItem: SatelliteListModel
+            oldItem: SatellitesModel,
+            newItem: SatellitesModel
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areItemsTheSame(
-            oldItem: SatelliteListModel,
-            newItem: SatelliteListModel
+            oldItem: SatellitesModel,
+            newItem: SatellitesModel
         ): Boolean {
             return oldItem.id == newItem.id
         }

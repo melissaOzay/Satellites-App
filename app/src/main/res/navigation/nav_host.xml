@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listScreenFragment"
-        android:name="com.example.satellites_app.ui.listScreen.SatelliteListFragment"
+        android:name="com.example.satellites_app.ui.satellites.SatelliteListFragment"
         android:label="ListScreenFragment"
         tools:layout="@layout/fragment_list_satellite">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.satellites_app.ui.detail.SatelliteDetailFragment"
+        android:name="com.example.satellites_app.ui.satellitedetail.SatelliteDetailFragment"
         android:label="DetailFragment"
         tools:layout="@layout/fragment_detail_satellite">
         <argument
