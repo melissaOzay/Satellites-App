@@ -1,8 +1,8 @@
 package com.example.satellites_app.features.satallite.domain.mapper
 
-import com.example.satellites_app.data.local.db.entity.SatelliteDetailEntity
-import com.example.satellites_app.data.local.db.entity.SatelliteListEntity
-import com.example.satellites_app.data.local.db.entity.SatellitePositionsEntity
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatelliteDetailEntity
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatelliteListEntity
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatellitePositionsEntity
 import com.example.satellites_app.features.satallite.data.model.JsonSatelliteDetailModel
 import com.example.satellites_app.features.satallite.data.model.JsonSatelliteListModel
 import com.example.satellites_app.features.satallite.data.model.JsonSatellitePositionsModel

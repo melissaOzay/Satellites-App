@@ -1,11 +1,11 @@
-package com.example.satellites_app.data.local.db.dao
+package com.example.satellites_app.features.satallite.data.local.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.satellites_app.data.local.db.entity.SatelliteDetailEntity
-import com.example.satellites_app.data.local.db.entity.SatelliteListEntity
-import com.example.satellites_app.data.local.db.entity.SatellitePositionsEntity
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatelliteDetailEntity
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatelliteListEntity
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatellitePositionsEntity
 
 @Dao
 interface SatelliteDao {

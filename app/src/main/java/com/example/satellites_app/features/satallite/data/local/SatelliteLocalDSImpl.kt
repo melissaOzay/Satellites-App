@@ -1,10 +1,10 @@
 package com.example.satellites_app.features.satallite.data.local
 
-import com.example.satellites_app.data.local.db.dao.SatelliteDao
-import com.example.satellites_app.data.local.db.entity.Position
-import com.example.satellites_app.data.local.db.entity.SatelliteDetailEntity
-import com.example.satellites_app.data.local.db.entity.SatelliteListEntity
-import com.example.satellites_app.data.local.db.entity.SatellitePositionsEntity
+import com.example.satellites_app.features.satallite.data.local.db.dao.SatelliteDao
+import com.example.satellites_app.features.satallite.data.local.db.entity.Position
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatelliteDetailEntity
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatelliteListEntity
+import com.example.satellites_app.features.satallite.data.local.db.entity.SatellitePositionsEntity
 import com.example.satellites_app.features.satallite.domain.mapper.toSatellites
 import com.example.satellites_app.features.satallite.domain.mapper.toSatellitePositions
 import com.example.satellites_app.features.satallite.domain.model.SatelliteDetailModel
@@ -53,7 +53,8 @@ class SatelliteLocalDSImpl @Inject constructor(
     }
 
     override suspend fun insertSatellitePositions(satellitePositionsModel: SatellitePositionsModel) {
-        return satelliteDao.insertPositions(SatellitePositionsEntity(
+        return satelliteDao.insertPositions(
+            SatellitePositionsEntity(
             positionId = satellitePositionsModel.id,
             positions = satellitePositionsModel.positions.map {
                 Position(posX = it.posX, posY = it.posY)

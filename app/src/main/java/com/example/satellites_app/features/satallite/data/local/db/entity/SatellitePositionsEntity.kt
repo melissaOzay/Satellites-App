@@ -1,4 +1,4 @@
-package com.example.satellites_app.data.local.db.entity
+package com.example.satellites_app.features.satallite.data.local.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

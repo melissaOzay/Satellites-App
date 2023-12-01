@@ -1,4 +1,4 @@
-package com.example.satellites_app.data.di
+package com.example.satellites_app.di
 
 import com.example.satellites_app.features.satallite.domain.repository.SatelliteRepository
 import com.example.satellites_app.features.satallite.data.repository.SatelliteRepositoryImpl

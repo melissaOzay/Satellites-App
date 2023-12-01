@@ -1,8 +1,8 @@
-package com.example.satellites_app.data.di
+package com.example.satellites_app.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.satellites_app.data.local.db.SatelliteAppDB
+import com.example.satellites_app.data.db.SatelliteAppDB
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -20,7 +20,7 @@ object SatelliteDBModule {
     fun provideSatelliteDataBase(@ApplicationContext app: Context) =
         Room.databaseBuilder(app, SatelliteAppDB::class.java, "satellite_db").build()
 
-    @Reusable
+    @Singleton
     @Provides
     fun provideSatelliteListDao(db: SatelliteAppDB) = db.getSatelliteDao()
 }

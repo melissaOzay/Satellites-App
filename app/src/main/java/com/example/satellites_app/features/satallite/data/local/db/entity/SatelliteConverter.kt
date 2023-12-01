@@ -1,4 +1,4 @@
-package com.example.satellites_app.data.local.db.entity
+package com.example.satellites_app.features.satallite.data.local.db.entity
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
