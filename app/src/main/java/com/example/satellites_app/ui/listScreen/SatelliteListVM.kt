@@ -1,6 +1,5 @@
 package com.example.satellites_app.ui.listScreen
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.satellites_app.base.BaseViewModel
@@ -8,6 +7,7 @@ import com.example.satellites_app.features.satallite.data.model.SatelliteListMod
 import com.example.satellites_app.features.satallite.domain.usecase.SatelliteListUseCase
 import com.example.satellites_app.utility.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,6 +15,7 @@ import javax.inject.Inject
 class SatelliteListVM @Inject constructor(
     private val satelliteListUseCase: SatelliteListUseCase,
 ) : BaseViewModel() {
+    private val tempSatelliteList = ArrayList<SatelliteListModel>()
 
     private val _satelliteList = MutableLiveData<List<SatelliteListModel>>()
     val satelliteList = _satelliteList
@@ -29,18 +30,33 @@ class SatelliteListVM @Inject constructor(
     private fun getSatellites() {
         showLoading()
         viewModelScope.launch {
+            delay(2000)
             hideLoading()
-            val response = satelliteListUseCase()
-            when (response) {
-                    is Resource.Success -> {
-                        _satelliteList.postValue(response.data?.let { it })
+            when (val response = satelliteListUseCase()) {
+                is Resource.Success -> {
+                    response.data.let {
+                        _satelliteList.postValue(it)
+                        tempSatelliteList.addAll(it)
                     }
-
-                    is Resource.Failure -> {
-                        _errorMessage.postValue(response.error)
-
                 }
 
+                is Resource.Failure -> {
+                    _errorMessage.postValue(response.error)
+                }
+
+            }
+        }
+    }
+
+    fun filter(query: String) {
+        satelliteList.value?.let {
+            if (query.isNotEmpty() && query.length > 1) {
+                val filterList = it.filter { satellite ->
+                    satellite.name.contains(query, ignoreCase = true)
+                }
+                _satelliteList.postValue(filterList)
+            } else {
+                _satelliteList.postValue(tempSatelliteList)
             }
         }
     }

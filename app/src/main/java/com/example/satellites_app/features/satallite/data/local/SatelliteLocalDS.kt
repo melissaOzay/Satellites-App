@@ -8,10 +8,10 @@ import com.example.satellites_app.features.satallite.data.model.SatelliteListMod
 import com.example.satellites_app.features.satallite.data.model.SatellitePositionModel
 
 interface SatelliteLocalDS {
-    suspend fun insertSatellite(satellites:SatelliteListEntity)
+    suspend fun insertSatelliteList(satellites:SatelliteListEntity)
     suspend fun getSatellites(): List<SatelliteListModel>
     suspend fun getSatelliteDetails(id:Int): List<SatelliteDetailModel>
-    suspend fun insertSatelliteDetail(satelliteDetailEntity:SatelliteDetailEntity)
+    suspend fun insertSatelliteDetails(satelliteDetailEntity:SatelliteDetailEntity)
     suspend fun getSatellitePositions(id:String): List<SatellitePositionModel>
-    suspend fun insertSatellitePosition(satellitePositionEntity: SatellitePositionEntity)
+    suspend fun insertSatellitePositions(satellitePositionEntity: SatellitePositionEntity)
 }

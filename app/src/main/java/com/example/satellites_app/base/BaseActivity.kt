@@ -9,7 +9,7 @@ abstract class BaseActivity<VM : BaseViewModel, B : ViewBinding> : AppCompatActi
     abstract val viewModel: VM
     private var loadingDialog: LoadingDialog? = null
     private var _binding: B? = null
-    val binding get() = _binding
+    private val binding get() = _binding
     open fun initialize() {}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

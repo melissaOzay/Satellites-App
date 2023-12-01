@@ -1,5 +1,6 @@
 package com.example.satellites_app.features.satallite.data.repository
 
+import android.util.Log
 import com.example.satellites_app.data.local.db.entity.Position
 import com.example.satellites_app.data.local.db.entity.SatelliteDetailEntity
 import com.example.satellites_app.data.local.db.entity.SatelliteListEntity
@@ -12,10 +13,10 @@ import com.example.satellites_app.features.satallite.data.model.SatellitePositio
 import com.example.satellites_app.features.satallite.domain.repository.SatelliteRepository
 import com.example.satellites_app.utility.ReadFile
 import com.example.satellites_app.utility.Resource
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
 import javax.inject.Inject
 
 class SatelliteRepositoryImpl @Inject constructor(
@@ -29,7 +30,7 @@ class SatelliteRepositoryImpl @Inject constructor(
                 if (localSatellites.isEmpty()) {
                     val satelliteList = addSatelliteList()
                     satelliteList.map {
-                        satelliteLocalDs.insertSatellite(
+                        satelliteLocalDs.insertSatelliteList(
                             SatelliteListEntity(
                                 satelliteId = it.id,
                                 active = it.active,
@@ -54,7 +55,7 @@ class SatelliteRepositoryImpl @Inject constructor(
                 if (localSatellites.isEmpty()) {
                     val satelliteDetail = addSatelliteDetails()
                     satelliteDetail.map {
-                        satelliteLocalDs.insertSatelliteDetail(
+                        satelliteLocalDs.insertSatelliteDetails(
                             SatelliteDetailEntity(
                                 satelliteId = it.id,
                                 costPerLaunch = it.costPerLaunch,
@@ -82,11 +83,11 @@ class SatelliteRepositoryImpl @Inject constructor(
                 if (localSatellites.isEmpty()) {
                     val satellitePosition = addSatellitePositions()
                     satellitePosition.map {
-                        satelliteLocalDs.insertSatellitePosition(
+                        satelliteLocalDs.insertSatellitePositions(
                             SatellitePositionEntity(
                                 positionId = it.id,
-                                positions = it.positions.map {
-                                    Position(posX = it.posX, posY = it.posY)
+                                positions = it.positions.map {position->
+                                    Position(posX = position.posX, posY = position.posY)
                                 }
                             )
                         )
@@ -104,8 +105,8 @@ class SatelliteRepositoryImpl @Inject constructor(
     private suspend fun addSatelliteList(): List<SatelliteListModel> {
         return withContext(Dispatchers.IO) {
             val read = ReadFile.readJsonFromAssets("satellite_list.json")
-            val serializer = serializer<List<SatelliteListModel>>()
-            val satelliteList = Json.decodeFromString(serializer, read)
+            val type = object : TypeToken<List<SatelliteListModel>>() {}.type
+            val satelliteList = Gson().fromJson<List<SatelliteListModel>>(read, type)
             satelliteList
         }
 
@@ -114,9 +115,9 @@ class SatelliteRepositoryImpl @Inject constructor(
     private suspend fun addSatelliteDetails(): List<SatelliteDetailModel> {
         return withContext(Dispatchers.IO) {
             val read = ReadFile.readJsonFromAssets("satellite_detail.json")
-            val serializer = serializer<List<SatelliteDetailModel>>()
-            val satelliteDetail = Json.decodeFromString(serializer, read)
-            satelliteDetail
+            val type = object : TypeToken<List<SatelliteDetailModel>>() {}.type
+            val satelliteDetails = Gson().fromJson<List<SatelliteDetailModel>>(read, type)
+            satelliteDetails
         }
 
     }
@@ -124,9 +125,8 @@ class SatelliteRepositoryImpl @Inject constructor(
     private suspend fun addSatellitePositions(): List<SatellitePositionModel> {
         return withContext(Dispatchers.IO) {
             val read = ReadFile.readJsonFromAssets("satellite_position.json")
-            val serializer = serializer<SatellitePositionList>()
-            val satellitePosition = Json.decodeFromString(serializer, read)
-            satellitePosition.list
+            val satellitePositions = Gson().fromJson(read, SatellitePositionList::class.java)
+            satellitePositions.list
         }
 
     }

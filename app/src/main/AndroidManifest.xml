@@ -26,6 +26,7 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Base.Theme.SatellitesApp"
             android:exported="true" />
     </application>
 

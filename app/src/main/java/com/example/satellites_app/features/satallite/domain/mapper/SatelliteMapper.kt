@@ -8,13 +8,13 @@ import com.example.satellites_app.features.satallite.data.model.SatelliteDetailM
 import com.example.satellites_app.features.satallite.data.model.SatelliteListModel
 import com.example.satellites_app.features.satallite.data.model.SatellitePositionModel
 
-fun SatelliteListEntity.toSatellite() = SatelliteListModel(
+fun SatelliteListEntity.toSatelliteDetails() = SatelliteListModel(
     id = satelliteId,
     active = active,
     name = name
 )
 
-fun SatelliteDetailEntity.toSatellite() = SatelliteDetailModel(
+fun SatelliteDetailEntity.toSatelliteDetails() = SatelliteDetailModel(
     id = satelliteId,
     costPerLaunch = costPerLaunch,
     firstFlight = firstFlight,
@@ -22,7 +22,7 @@ fun SatelliteDetailEntity.toSatellite() = SatelliteDetailModel(
     mass = mass
 )
 
-fun SatellitePositionEntity.toSatellitePosition(): SatellitePositionModel {
+fun SatellitePositionEntity.toSatellitePositions(): SatellitePositionModel {
     return SatellitePositionModel(
         id = positionId.orEmpty(),
         positions = positions.map { position ->

@@ -1,6 +1,7 @@
 package com.example.satellites_app.ui.listScreen
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -37,9 +38,19 @@ class SatelliteListFragment : BaseFragment<FragmentListSatelliteBinding, Satelli
     override fun initUI() {
         super.initUI()
         initAdapter()
-        errorMessage()
+        observeErrorMessage()
         observeSatelliteList()
+        performSearch()
 
+    }
+    override fun onResume() {
+        super.onResume()
+        performSearch()
+        binding.searchView.setQuery(null, false)
+    }
+    override fun onDestroyView() {
+        binding.rv.adapter=null
+        super.onDestroyView()
     }
 
     private fun navigateToDetailFragment(id: Int, name: String) {
@@ -56,34 +67,35 @@ class SatelliteListFragment : BaseFragment<FragmentListSatelliteBinding, Satelli
         }
     }
 
-    private fun errorMessage() {
+    private fun observeErrorMessage() {
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+
         }
     }
 
     private fun observeSatelliteList() {
-        viewModel.satelliteList.observe(viewLifecycleOwner) {
-            adapter.submitList(it!!.toList())
-
-            binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    if (newText.length > 2) {
-                        adapter.filter(newText)
-                    }
-                    if (newText.isEmpty()) {
-                        adapter.submitList(it.toList())
-                    }
-                    return false
-                }
-
-            })
+        viewModel.satelliteList.observe(viewLifecycleOwner) { list ->
+            adapter.submitList(list)
+            if (list.isEmpty()) {
+                binding.message.visibility = View.VISIBLE
+            } else {
+                binding.message.visibility = View.GONE
+            }
 
         }
+    }
+
+    private fun performSearch() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean = false
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.filter(newText)
+                return false
+            }
+        })
+
     }
 
 }

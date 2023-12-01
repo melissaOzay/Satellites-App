@@ -14,12 +14,12 @@ import com.example.satellites_app.utility.ChangeTextColor
 import com.example.satellites_app.utility.SatelliteListAdapterListener
 
 class SatelliteListAdapter(private val listener: SatelliteListAdapterListener) :
-    ListAdapter<SatelliteListModel, SatelliteListAdapter.CompanyViewHolder>(SatelliteDiffUtil()) {
+    ListAdapter<SatelliteListModel, SatelliteListAdapter.SatelliteViewHolder>(SatelliteDiffUtil()) {
 
-    class CompanyViewHolder(binding: ItemSatelliteListBinding) :
+    class SatelliteViewHolder(binding: ItemSatelliteListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val tvName = binding.tvName
-        val tvActive = binding.tvActive
+        private val tvName = binding.tvName
+        private val tvActive = binding.tvActive
         private val ivActive = binding.ivActive
         private val context: Context = itemView.context
         fun bindItems(listener: SatelliteListAdapterListener, item: SatelliteListModel) {
@@ -55,22 +55,15 @@ class SatelliteListAdapter(private val listener: SatelliteListAdapterListener) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CompanyViewHolder {
+    ): SatelliteViewHolder {
         val itemBinding =
             ItemSatelliteListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CompanyViewHolder(itemBinding)
+        return SatelliteViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: CompanyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SatelliteViewHolder, position: Int) {
         holder.bindItems(listener, getItem(position))
 
-    }
-
-    fun filter(query: String) {
-        val filteredList = currentList.filter {
-            it.name.contains(query.lowercase(), ignoreCase = true)
-        }
-        submitList(filteredList)
     }
 
     private class SatelliteDiffUtil : DiffUtil.ItemCallback<SatelliteListModel>() {

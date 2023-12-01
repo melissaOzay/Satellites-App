@@ -18,7 +18,6 @@ interface SatelliteDao {
     suspend fun insertDetail(satellitesEntity: SatelliteDetailEntity)
     @Query("SELECT * FROM satellite_detail WHERE satelliteId=:satelliteId")
     suspend fun getSatelliteDetail(satelliteId:Int): List<SatelliteDetailEntity>
-
     @Insert
     suspend fun insertPosition(satellitesEntity: SatellitePositionEntity)
     @Query("SELECT * FROM satellite_position WHERE positionId=:id")

@@ -9,7 +9,6 @@ import com.example.satellites_app.base.BaseFragment
 import com.example.satellites_app.databinding.FragmentDetailSatelliteBinding
 import com.example.satellites_app.utility.DateFormat
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -28,21 +27,15 @@ class SatelliteDetailFragment : BaseFragment<FragmentDetailSatelliteBinding, Sat
         super.onResume()
         arguments?.let {
             val id = SatelliteDetailFragmentArgs.fromBundle(it).id
-            viewModel.getSatellites(id)
-            viewModel.getSatellitePosition(id.toString())
+            viewModel.getSatelliteDetail(id)
+            viewModel.getSatellitePositions(id.toString())
         }
         observeSatelliteDetail()
-        errorMessage()
+        observeErrorMessage()
 
     }
 
-    override fun initUI() {
-        super.initUI()
-        observeSatelliteDetail()
-
-    }
-
-    private fun errorMessage() {
+    private fun observeErrorMessage() {
         viewModel.errorMessage.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
@@ -50,37 +43,27 @@ class SatelliteDetailFragment : BaseFragment<FragmentDetailSatelliteBinding, Sat
 
     private fun observeSatelliteDetail() {
         viewModel.satelliteDetail.observe(viewLifecycleOwner) {
-            it?.map {
-                arguments?.let { arg ->
-                    val name = SatelliteDetailFragmentArgs.fromBundle(arg).name
-                    with(binding) {
-                        tvName.text = name
-                        val date = it.firstFlight
-                        val newDate = DateFormat.format(date)
-                        tvFirstFlight.text = newDate
-                        val heightMass = "${it.height}/${it.mass}"
-                        binding.tvHeight.text = heightMass
-                        binding.tvCost.text = it.costPerLaunch.toString()
-                    }
+            lifecycleScope.launch {
+                it?.map {
+                    arguments?.let { arg ->
+                        val name = SatelliteDetailFragmentArgs.fromBundle(arg).name
+                        with(binding) {
+                            tvName.text = name
+                            val date = it.firstFlight
+                            val newDateFormat = DateFormat.format(date)
+                            val heightMass = "${it.height}/${it.mass}"
+                            tvFirstFlight.text = newDateFormat
+                            tvHeight.text = heightMass
+                            tvCost.text = it.costPerLaunch.toString()
+                        }
 
+                    }
                 }
             }
         }
-
-        viewModel.satellitePosition.observe(viewLifecycleOwner) { satellitePositions ->
-            satellitePositions?.forEach { satellitePosition ->
-                lifecycleScope.launch {
-                    val positionFirstNumber =
-                        "(${satellitePosition.positions[0].posX},${satellitePosition.positions[0].posY})"
-                    binding.tvPosition.text = positionFirstNumber
-                    satellitePosition.positions.forEach { position ->
-                        delay(3000)
-                        val positionNumber = "(${position.posX},${position.posY})"
-                        binding.tvPosition.text = positionNumber
-
-                    }
-                }
-            }
+        viewModel.satellitePosition.observe(viewLifecycleOwner) {
+                val positionNumber = "(${it.posX},${it.posY})"
+                binding.tvPosition.text = positionNumber
         }
     }
 

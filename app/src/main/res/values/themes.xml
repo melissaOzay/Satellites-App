@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.SatellitesApp" parent="Theme.Material3.DayNight.NoActionBar">
-
+        <item name="colorPrimaryDark">@color/grey</item>
     </style>
     <style name="Theme.SatellitesApp" parent="Base.Theme.SatellitesApp" />
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar" >
