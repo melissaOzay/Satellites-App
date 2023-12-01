@@ -45,7 +45,7 @@ class SatelliteListFragment : BaseFragment<FragmentListSatelliteBinding, Satelli
     }
     override fun onResume() {
         super.onResume()
-        binding.searchView.setQuery(null, false)
+        performSearch()
     }
     override fun onDestroyView() {
         binding.rv.adapter=null

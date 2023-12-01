@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 
 @Entity(tableName = "satellite_position")
-data class SatellitePositionEntity(
+data class SatellitePositionsEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val positionId: String? = null,

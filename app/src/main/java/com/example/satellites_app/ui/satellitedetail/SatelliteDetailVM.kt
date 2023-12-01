@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.satellites_app.base.BaseViewModel
 import com.example.satellites_app.features.satallite.domain.model.Position
 import com.example.satellites_app.features.satallite.domain.model.SatelliteDetailModel
-import com.example.satellites_app.features.satallite.domain.usecase.SatelliteDetailsUseCase
+import com.example.satellites_app.features.satallite.domain.usecase.SatelliteDetailUseCase
 import com.example.satellites_app.features.satallite.domain.usecase.SatellitePositionsUseCase
 import com.example.satellites_app.utility.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,14 +15,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SatelliteDetailVM @Inject constructor(
-    private val satelliteDetailUseCase: SatelliteDetailsUseCase,
+    private val satelliteDetailUseCase: SatelliteDetailUseCase,
     private val satellitePositionUseCase: SatellitePositionsUseCase
 ) : BaseViewModel() {
     private val _satelliteDetail = MutableLiveData<SatelliteDetailModel>()
     val satelliteDetail = _satelliteDetail
 
-    private val _satellitePosition = MutableLiveData<Position>()
-    val satellitePosition = _satellitePosition
+    private val _satellitePositions = MutableLiveData<Position>()
+    val satellitePositions = _satellitePositions
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage = _errorMessage
@@ -35,7 +35,7 @@ class SatelliteDetailVM @Inject constructor(
                     hideLoading()
                     response.data.firstOrNull()?.positions?.let { positions ->
                         for (position in positions) {
-                            satellitePosition.postValue(position)
+                            satellitePositions.postValue(position)
                             delay(if (position == positions.first()) 2000 else 3000)
                         }
                     }

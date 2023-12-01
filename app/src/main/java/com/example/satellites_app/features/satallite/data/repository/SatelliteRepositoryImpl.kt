@@ -68,15 +68,15 @@ class SatelliteRepositoryImpl @Inject constructor(
     override suspend fun getSatellitePositions(id: String): Resource<List<SatellitePositionsModel>> {
         return withContext(Dispatchers.IO) {
             try {
-                val localSatellites = satelliteLocalDs.getSatellitePositions(id)
-                if (localSatellites.isEmpty()) {
+                val localSatellitePositions = satelliteLocalDs.getSatellitePositions(id)
+                if (localSatellitePositions.isEmpty()) {
                     val satellitePosition = getSatellitePositions()
                     satellitePosition.map {
                         satelliteLocalDs.insertSatellitePositions(it)
                     }
                     Resource.Success(satellitePosition)
                 } else {
-                    Resource.Success(localSatellites)
+                    Resource.Success(localSatellitePositions)
                 }
             } catch (ex: Exception) {
                 Resource.Failure(Throwable(ex.message).toString())

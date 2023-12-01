@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.example.satellites_app.data.local.db.entity.SatelliteDetailEntity
 import com.example.satellites_app.data.local.db.entity.SatelliteListEntity
-import com.example.satellites_app.data.local.db.entity.SatellitePositionEntity
+import com.example.satellites_app.data.local.db.entity.SatellitePositionsEntity
 
 @Dao
 interface SatelliteDao {
@@ -22,9 +22,9 @@ interface SatelliteDao {
     suspend fun getSatelliteDetail(satelliteId: Int): SatelliteDetailEntity?
 
     @Insert
-    suspend fun insertPosition(satellitesEntity: SatellitePositionEntity)
+    suspend fun insertPositions(satellitesEntity: SatellitePositionsEntity)
 
     @Query("SELECT * FROM satellite_position WHERE positionId=:id")
-    suspend fun getSatellitePosition(id: String): List<SatellitePositionEntity>
+    suspend fun getSatellitePositions(id: String): List<SatellitePositionsEntity>
 
 }

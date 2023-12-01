@@ -58,7 +58,7 @@ class SatelliteDetailFragment : BaseFragment<FragmentDetailSatelliteBinding, Sat
 
         }
 
-        viewModel.satellitePosition.observe(viewLifecycleOwner) {
+        viewModel.satellitePositions.observe(viewLifecycleOwner) {
             val positionNumber = "(${it.posX},${it.posY})"
             binding.tvPosition.text = positionNumber
         }
