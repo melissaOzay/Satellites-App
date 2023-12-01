@@ -25,12 +25,13 @@
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="@dimen/_60sdp"
+            android:layout_width="@dimen/_82sdp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
+
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
