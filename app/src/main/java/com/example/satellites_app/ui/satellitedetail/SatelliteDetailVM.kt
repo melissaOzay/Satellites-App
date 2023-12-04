@@ -36,7 +36,7 @@ class SatelliteDetailVM @Inject constructor(
                     response.data.firstOrNull()?.positions?.let { positions ->
                         for (position in positions) {
                             satellitePositions.postValue(position)
-                            delay(if (position == positions.first()) 2000 else 3000)
+                            delay(3000)
                         }
                     }
                 }
